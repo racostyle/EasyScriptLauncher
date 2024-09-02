@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text.Json;
+using System.Threading;
 
 namespace EasyScriptLauncher
 {
@@ -14,80 +13,53 @@ namespace EasyScriptLauncher
         {
             try
             {
-                var config = LoadSettings();
+                var config = new Settings().LoadSettings(SETTINGS_FILE);
                 if (!Directory.Exists(config.ScriptsFolder))
                 {
-                    Console.WriteLine($"Please state the valid path to ps scripts!! {Environment.NewLine}Settings location: {Path.Combine(Directory.GetCurrentDirectory(), SETTINGS_FILE)}");
+                    Info.FillTheSettings(Path.Combine(Directory.GetCurrentDirectory(), SETTINGS_FILE));
                     Environment.Exit(1);
                 }
 
-                var files = Directory.GetFiles(config.ScriptsFolder).Where(x => x.EndsWith(".ps1"));
+                var files = Directory.GetFiles(config.ScriptsFolder, "*.ps1", SearchOption.AllDirectories);
 
                 foreach (var file in files)
                 {
+                    Console.WriteLine($"Starting {file}");
                     StartProcess(file, config);
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error occured while starting scripts: {ex.Message}");
+                Console.WriteLine(Info.GenericError(ex.Message));
                 Environment.Exit(1);
             }
-            Console.WriteLine($"OK!");
-        }
-
-        private static Config LoadSettings()
-        {
-            Config config;
-            if (File.Exists(SETTINGS_FILE))
-            {
-                var content = File.ReadAllText(SETTINGS_FILE);
-
-                try
-                {
-                    config = JsonSerializer.Deserialize<Config>(content);
-                    return config;
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error while trying to read a file {SETTINGS_FILE}. Error: {ex.Message}");
-                }
-            }
-
-            config = new Config
-            {
-                ScriptsFolder = "A:\\path\\to\\script",
-                RunInSameWindow = false,
-                HideWindow = false
-            };
-            var json = JsonSerializer.Serialize(config);
-            File.WriteAllText(SETTINGS_FILE, json);
-
-            return config;
+            Console.WriteLine(Info.Done());
         }
 
         private static void StartProcess(string pathToScript, Config config)
         {
+            bool useShellToExecute = !config.RunInSameWindow;
+
             ProcessStartInfo startInfo = new ProcessStartInfo()
             {
                 FileName = "powershell.exe",
                 Arguments = $"-ExecutionPolicy Bypass -File \"{pathToScript}\"",
                 Verb = "RunAs",
-                UseShellExecute = !config.RunInSameWindow,
-                CreateNoWindow = config.HideWindow
+                UseShellExecute = useShellToExecute,
+                CreateNoWindow = config.HideWindow,
+                RedirectStandardError = !useShellToExecute,
+                RedirectStandardOutput = !useShellToExecute
             };
 
             var process = new Process();
             process.StartInfo = startInfo;
             process.Start();
-        }
 
-        public class Config
-        {
-            public string ScriptsFolder { get; set; }
-            public bool SearchForScriptsRecursively { get; set; }
-            public bool RunInSameWindow { get; set; }
-            public bool HideWindow { get; set; }
+            Thread.Sleep(2000);
+            if (!process.HasExited)
+                Console.WriteLine(Info.ScriptStartedSuccessfully(pathToScript));
+            else      
+                Console.WriteLine(Info.ScriptLoadingFailed());
         }
     }
 }
