@@ -12,7 +12,7 @@ namespace EasyScriptLauncher
         }
         internal void StartingScript(string path)
         {
-            string text = $"Starting script: {path}";
+            string text = $"Starting script: {path}{Environment.NewLine}";
             LogInLoggerAndConsole(text);
         }
 
@@ -54,13 +54,13 @@ namespace EasyScriptLauncher
 
         internal void Done()
         {
-            string text = "Completed";
+            string text = $"Completed!{Environment.NewLine}";
             LogInLoggerAndConsole(text);
         }
      
         internal void ScriptCompleted()
         {
-            string text = "Script execution finished successfully.";
+            string text = $"Script execution finished successfully.{Environment.NewLine}";
             LogInLoggerAndConsole(text);
         }
 
