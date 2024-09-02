@@ -6,5 +6,6 @@
         public bool SearchForScriptsRecursively { get; set; }
         public bool RunInSameWindow { get; set; }
         public bool HideWindow { get; set; }
+        public bool TestBehaviour { get; set; }
     }
 }

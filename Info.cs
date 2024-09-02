@@ -1,37 +1,73 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 
 namespace EasyScriptLauncher
 {
-    internal static class Info
+    internal class Info
     {
-        internal static string ScriptLoadingFailed(string script, string message)
+        private readonly Logger _logger;
+
+        public Info(Logger logger)
         {
-            return $"Error occured while starting script: {script}{Environment.NewLine}Error: {message}{Environment.NewLine}";
+            _logger = logger;
         }
-        internal static string ScriptLoadingFailed()
+        internal void StartingScript(string path)
         {
-            return $"Error occured while starting script!{Environment.NewLine}";
+            string text = $"Starting script: {path}";
+            LogInLoggerAndConsole(text);
         }
 
-        internal static string FillTheSettings(string path)
+        internal void ScriptLoadingFailed(string script, string message)
         {
-            return $"Please state the valid path to ps scripts!!{Environment.NewLine}Settings location: {path}{Environment.NewLine}";
+            string text = $"Error occured while starting script: {script}{Environment.NewLine}Error: {message}{Environment.NewLine}";
+            LogInLoggerAndConsole(text);
+        }
+        internal void ScriptLoadingFailed()
+        {
+            string text = $"Error occured while starting script!{Environment.NewLine}";
+            LogInLoggerAndConsole(text);
         }
 
-        internal static string ScriptStartedSuccessfully(string script)
+        internal void FillTheSettings(string path)
         {
-            return $"Script {script} started successfully{Environment.NewLine}";
+            string text = $"Please state the valid path to ps scripts in settings.{Environment.NewLine}Settings location: {path}{Environment.NewLine}";
+            LogInLoggerAndConsole(text);
         }
 
-        internal static string GenericError(string message)
+        internal void ScriptStartedSuccessfully(string script)
         {
-            return $"An Error occured {message}{Environment.NewLine}";
+            string text = $"Script {script} started successfully{Environment.NewLine}";
+            LogInLoggerAndConsole(text);
         }
 
-        internal static string Done()
+        internal void GenericError(string message)
         {
-            return "Completed";
+            string text = $"An Error occured {message}{Environment.NewLine}";
+            LogInLoggerAndConsole(text);
+        }
+
+        internal void NoScriptsFound(string path, bool searchRecursively)
+        {
+            string tmp = searchRecursively ? "true" : "false";
+            string text = $"No scripts found!{Environment.NewLine}Location: {path}{Environment.NewLine}Search Recursively: {tmp}{Environment.NewLine}";
+            LogInLoggerAndConsole(text);
+        }
+
+        internal void Done()
+        {
+            string text = "Completed";
+            LogInLoggerAndConsole(text);
+        }
+     
+        internal void ScriptCompleted()
+        {
+            string text = "Script execution finished successfully.";
+            LogInLoggerAndConsole(text);
+        }
+
+        private void LogInLoggerAndConsole(string text)
+        {
+            _logger.Log(text);
+            Console.WriteLine(text);
         }
     }
 }

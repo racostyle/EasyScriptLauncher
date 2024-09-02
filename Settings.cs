@@ -28,7 +28,9 @@ namespace EasyScriptLauncher
             {
                 ScriptsFolder = "A:\\path\\to\\script",
                 RunInSameWindow = false,
-                HideWindow = false
+                HideWindow = false,
+                SearchForScriptsRecursively = false,
+                TestBehaviour = false,
             };
             var json = JsonSerializer.Serialize(config);
             File.WriteAllText(settingsFile, json);
