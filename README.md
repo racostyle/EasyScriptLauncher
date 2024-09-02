@@ -14,11 +14,11 @@ EasyScriptLauncher is a simple utility designed to automatically execute PowerSh
 * The `EasyScriptLauncher_Settings.json` file controls how the application behaves. Below are the configurable options:
 ```json
 {
-     "ScriptsFolder": "A:\\path\\to\\scripts",
-     "SearchForScriptsRecursively": false,
-     "RunInSameWindow": false,
-     "HideWindow": false,
-     "TestBehaviour": false
+    "ScriptsFolder": "A:\\path\\to\\scripts",
+    "SearchForScriptsRecursively": false,
+    "RunInSameWindow": false,   
+    "HideWindow": false,
+    "TestBehaviour": false
 }
 ```
 
