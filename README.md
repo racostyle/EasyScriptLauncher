@@ -27,7 +27,7 @@ EasyScriptLauncher is a simple utility designed to automatically execute PowerSh
   * **`SearchForScriptsRecursively`**: If set to `true`, the application will search for scripts in all subdirectories within `ScriptsFolder`. If `false`, it only looks in the top-level directory.
   * **`RunInSameWindow`**: If set to `true`, scripts will run in the same console window. If `false`, scripts will run in a separate window.
   * **`HideWindow`**: If `true`, the window where the script runs will be hidden. This is useful if you want the scripts to run in the background without displaying a console window.
-  * **`TestBehaviour`**: If `true`, the application will run a dummy command that exits immediately instead of executing the actual scripts. This can be useful for testing purposes.
+  * **`TestBehaviour`**: If `true`, the application will run a dummy command that exits immediately instead of executing the actual scripts. This can be useful for testing purposes. Basically app will do every safetcyheck, will search for scripts but at the end will just fire script with exit code
 
 ## How It Works
 
