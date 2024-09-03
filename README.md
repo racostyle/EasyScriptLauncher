@@ -2,6 +2,32 @@
 
 EasyScriptLauncher is a simple utility designed to automatically execute PowerShell scripts located in a specified folder. This application allows you to configure and control the execution of these scripts through a JSON settings file.
 
+> [!IMPORTANT]
+> If using this for autostart dont run this as an admin. It wont start! You will need to use task scheduler. You don't need elevated priveledges anyway since this app will run scripts with admin rights.
+
+> [!NOTE]
+> How to open autostart folde. Press the `Windows logo key + R`: `shell:startup` (current user Startup folder) or `shell:common startup` (all users startup folder)
+
+## How to Use
+
+**Create and configure the settings**:
+   - The application requires a settings file named `EasyScriptLauncher_Settings.json` to be in the same directory as the executable.
+   - If this file doesn't exist, the application will create a default one for you.
+   - Open the `EasyScriptLauncher_Settings.json` file and adjust the configurations as needed (see the Settings section below).
+
+### EasyScriptLauncher_Settings
+
+* The `EasyScriptLauncher_Settings.json` file controls how the application behaves. Below are the configurable options:
+```json
+{
+    "ScriptsFolder": "A:\\path\\to\\scripts",
+    "SearchForScriptsRecursively": false,
+    "RunInSameWindow": false,   
+    "HideWindow": false,
+    "TestBehaviour": false
+}
+```
+
 ## How to Use
 
 **Create and configure the settings**:
