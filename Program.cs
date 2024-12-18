@@ -1,25 +1,25 @@
-﻿using System;
-using System.Diagnostics;
+﻿using EasyScriptLauncher.Utils;
+using System;
 using System.IO;
-using System.Threading;
 
 namespace EasyScriptLauncher
 {
     internal class Program
     {
         static readonly string SETTINGS_FILE = "EasyScriptLauncher_Settings.json";
-        private static Info _info;
 
         static void Main(string[] args)
         {
-            _info = new Info(new Logger());
+            var info = new Info(new Logger());
 
             try
             {
-                var config = new Settings().LoadSettings(SETTINGS_FILE);
+                var config = new SettingsLoader().LoadSettings(SETTINGS_FILE);
+                var processLauncher = new ProcessLauncher(info, config);
+
                 if (!Directory.Exists(config.ScriptsFolder))
                 {
-                    _info.FillTheSettings(Path.Combine(Directory.GetCurrentDirectory(), SETTINGS_FILE));
+                    info.FillTheSettings(Path.Combine(Directory.GetCurrentDirectory(), SETTINGS_FILE));
                     Environment.Exit(1);
                 }
 
@@ -31,60 +31,22 @@ namespace EasyScriptLauncher
 
                 if (scripts.Length == 0)
                 {
-                    _info.NoScriptsFound(config.ScriptsFolder, config.SearchForScriptsRecursively);
+                    info.NoScriptsFound(config.ScriptsFolder, config.SearchForScriptsRecursively);
                     Environment.Exit(1);
                 }
 
                 foreach (var script in scripts)
                 {
-                    _info.StartingScript(script);
-                    StartProcess(script, config);
+                    info.StartingScript(script);
+                    processLauncher.StartProcess(script, config);
                 }
             }
             catch (Exception ex)
             {
-                _info.GenericError(ex.Message);
+                info.GenericError(ex.Message);
                 Environment.Exit(1);
             }
-            _info.Done();
-        }
-
-        private static void StartProcess(string pathToScript, Config config)
-        {
-            bool useShellToExecute = !config.RunInSameWindow;
-
-            string argument;
-            if (config.TestBehaviour)
-                argument = "-ExecutionPolicy Bypass -Command \"exit 0\"";
-            else
-                argument = $"-ExecutionPolicy Bypass -File \"{pathToScript}\"";
-            
-            ProcessStartInfo startInfo = new ProcessStartInfo()
-            {
-                FileName = "powershell.exe",
-                Arguments = argument,
-                Verb = "RunAs",
-                UseShellExecute = useShellToExecute,
-                CreateNoWindow = config.HideWindow,
-                RedirectStandardError = !useShellToExecute,
-                RedirectStandardOutput = !useShellToExecute
-            };
-
-            var process = new Process();
-            process.StartInfo = startInfo;
-            process.Start();
-
-            Thread.Sleep(2000);
-            if (!process.HasExited)
-                _info.ScriptStartedSuccessfully(pathToScript);
-            else
-            {
-                if (process.ExitCode == 0)
-                    _info.ScriptCompleted();
-                else
-                    _info.ScriptLoadingFailed();
-            }
-                
+            info.Done();
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EasyScriptLauncher
+namespace EasyScriptLauncher.Utils
 {
     internal class Info
     {
@@ -57,7 +57,7 @@ namespace EasyScriptLauncher
             string text = $"Completed!{Environment.NewLine}";
             LogInLoggerAndConsole(text);
         }
-     
+
         internal void ScriptCompleted()
         {
             string text = $"Script execution finished successfully.{Environment.NewLine}";

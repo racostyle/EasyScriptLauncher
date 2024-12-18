@@ -2,9 +2,9 @@
 using System.IO;
 using System.Text.Json;
 
-namespace EasyScriptLauncher
+namespace EasyScriptLauncher.Utils
 {
-    internal class Settings
+    internal class SettingsLoader
     {
         internal Config LoadSettings(string settingsFile)
         {
@@ -31,6 +31,7 @@ namespace EasyScriptLauncher
                 HideWindow = false,
                 SearchForScriptsRecursively = false,
                 TestBehaviour = false,
+                LoadProfile = false,
             };
             var json = JsonSerializer.Serialize(config);
             File.WriteAllText(settingsFile, json);

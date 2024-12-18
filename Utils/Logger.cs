@@ -3,13 +3,13 @@ using System;
 using System.IO;
 using System.Linq;
 
-namespace EasyScriptLauncher
+namespace EasyScriptLauncher.Utils
 {
     internal class Logger
     {
         const string LOG_FILE = "EasyScriptLauncher_Log.txt";
         const int LIMIT = 10;
-        readonly string SEPARATOR = Environment.NewLine + Environment.NewLine; 
+        readonly string SEPARATOR = Environment.NewLine + Environment.NewLine;
 
         public Logger()
         {
